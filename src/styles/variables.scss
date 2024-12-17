@@ -1,0 +1,19 @@
+/* 颜色变量 */
+
+// 行为颜色
+$qf-color-primary: #007aff;
+$qf-color-success: #4cd964;
+$qf-color-warning: #f0ad4e;
+$qf-color-error: #dd524d;
+
+// 文字颜色
+$qf-text-color:#eee;//基本色
+$qf-text-color-inverse:#fff;//反色
+$qf-text-color-grey:#999;//辅助灰色，如加载更多的提示信息
+$qf-text-color-placeholder: #808080;
+$qf-text-color-disable:#c0c0c0;
+
+// 背景颜色
+$qf-bg-color: #2d3a4b;
+$qf-bg-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
+$qf-bg-color-other:#f1f1f1;//点击状态颜色
