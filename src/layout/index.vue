@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import IndexAside from './components/IndexAside.vue'
+import IndexHeader from './components/IndexHeader.vue'
 </script>
 <template>
   <div class="common-layout">
     <el-container>
       <IndexAside />
       <el-container>
-        <el-header>Header</el-header>
+        <index-header></index-header>
         <el-main>Main</el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer>2023 © QFADMIN 前端扛把子@千锋教育 🔥 👊🏻👊🏻👊🏻</el-footer>
       </el-container>
     </el-container>
   </div>
@@ -19,18 +20,17 @@ import IndexAside from './components/IndexAside.vue'
   height: 100%;
   .el-container {
     height: 100%;
-    .el-header {
-      width: '100%';
-      height: 90px;
-      background-color: pink;
-    }
+
     .el-main {
       background-color: lightblue;
     }
     .el-footer {
       width: '100%';
       height: 40px;
-      background-color: skyblue;
+      // background-color: skyblue;
+      text-align: center;
+      line-height: 40px;
+      font-size: 12px;
     }
   }
 }
