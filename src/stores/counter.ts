@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { userLoginCheck } from '@/apis/auth'
+// import { userLoginCheck } from '@/apis/auth'
 export const useCounterStore = defineStore('counter', () => {
   const token = ref('')
-  const userInfo = () => {
+  /*   const userInfo = () => {
     return userLoginCheck(token.value)
-  }
-  return { token, userInfo }
+  } */
+  return { token }
 })
