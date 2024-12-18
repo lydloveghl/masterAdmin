@@ -10,9 +10,14 @@ import {
   Check,
   CircleCheck,
   ArrowDown,
+  Expand,
 } from '@element-plus/icons-vue'
 import { reactive, toRefs } from 'vue'
-
+import { useAsideStore } from '@/stores/aside'
+const asideStore = useAsideStore()
+const showAsideNav = () => {
+  asideStore.isCollapse = !asideStore.isCollapse
+}
 const state = reactive({
   circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
   squareUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
@@ -26,7 +31,8 @@ const { circleUrl } = toRefs(state)
     <el-header>
       <p class="pageRouter">
         <span>
-          <el-icon><Fold /></el-icon>
+          <el-icon @click="showAsideNav()" v-show="asideStore.isCollapse"><Fold /></el-icon>
+          <el-icon @click="showAsideNav()" v-show="!asideStore.isCollapse"><Expand /></el-icon>
           <el-breadcrumb :separator-icon="ArrowRight">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>后台首页</el-breadcrumb-item>
