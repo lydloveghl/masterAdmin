@@ -18,8 +18,10 @@ const asideStore = useAsideStore()
       text-color="#fff"
       :collapse="!asideStore.isCollapse"
       :collapse-transition="false"
+      router
+      unique-opened
     >
-      <el-sub-menu v-for="item in menuList" :key="item.auth_id" :index="item.auth_id">
+      <el-sub-menu v-for="item in menuList" :key="item.auth_id" :index="String(item.auth_id)">
         <template #title>
           <i class="iconfont" :class="item.icon"></i>
           <span>{{ item.auth_name }}</span>
@@ -27,7 +29,7 @@ const asideStore = useAsideStore()
         <el-menu-item
           v-for="menuItem in item.children"
           :key="menuItem.auth_id"
-          :index="menuItem.auth_id"
+          :index="menuItem.path"
         >
           <i class="iconfont" :class="menuItem.icon"></i>
           {{ menuItem.auth_name }}

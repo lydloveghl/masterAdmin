@@ -25,13 +25,18 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      '/ftyyptapi': {
+        target: 'http://123.56.141.187:82',
+      },
+    },
   },
   css: {
     preprocessorOptions: {
       // define global scss variable
       scss: {
         additionalData: `
-				@import '@/styles/variables.scss';
+				@use '@/styles/variables.scss' as *;
 			`,
       },
     },

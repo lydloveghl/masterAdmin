@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-import type { loginType } from '@/types/user'
+import type { loginType, apiType, loginData } from '@/types/user'
 export const loginApi = (data: loginType) => {
-  return request({
+  return request<apiType<loginData>>({
     method: 'post',
     url: '/user/login',
     data,

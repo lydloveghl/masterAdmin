@@ -2,12 +2,11 @@
 import { ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
-import { loginApi } from '@/api/user'
-import { useCounterStore } from '@/stores/counter'
-const loginStore = useCounterStore()
+import { useUserStore } from '@/stores/user'
+const loginStore = useUserStore()
 const loginForm = ref({
-  username: '',
-  password: '',
+  username: '神龙教主',
+  password: 'admin888',
 })
 const loginRules = {
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -20,8 +19,7 @@ const loginElement = ref<FormInstance>()
 const handleLogin = () => {
   loginElement.value!.validate(async (valid) => {
     if (!valid) return
-    const { data: res } = await loginApi(loginForm.value)
-    loginStore.token = res.data.token
+    loginStore.login(loginForm.value)
   })
 }
 </script>
