@@ -48,3 +48,25 @@ export interface userAddType {
   password: string
   mobile: string
 }
+
+export interface roleListType {
+  role_id: number
+  role_name: string
+  action_list: string
+  role_desc: string
+  created_at: string
+  updated_at: string
+  auth_ids: string
+  auth_ids_son: string
+}
+export interface roleListRes {
+  msg: string
+  state: number
+  total: number
+  list: roleListType[]
+}
+export interface roleCreateRes {
+  data: null
+  msg: string
+  state: number
+}

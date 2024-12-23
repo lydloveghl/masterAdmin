@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Search, ArrowDown, ArrowUp, Delete, Plus, Edit } from '@element-plus/icons-vue'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { userListApi } from '@/api/user'
 import { useRouter } from 'vue-router'
 import type { userRes } from '@/types/user'
