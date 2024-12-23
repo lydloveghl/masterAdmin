@@ -9,7 +9,7 @@ router.beforeEach((to, from, next) => {
   const whiteList = ['/login', '/404']
   if (token) {
     if (to.path === '/login') {
-      next('/index')
+      next('/')
     } else {
       next()
     }

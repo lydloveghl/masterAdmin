@@ -11,12 +11,23 @@ import {
 import { useAsideStore } from '@/stores/aside'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter()
 const asideStore = useAsideStore()
 const showAsideNav = () => {
   asideStore.isCollapse = !asideStore.isCollapse
 }
-const handleLogout = () => {
+const handleLogout = async () => {
+  const res = await ElMessageBox.confirm('确认退出登录吗?', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).catch((error) => error)
+  if (res === 'cancel') {
+    ElMessage.warning('已取消')
+    return
+  }
+  ElMessage.success('退出成功')
   userStore.logOut()
   router.push('/login')
 }

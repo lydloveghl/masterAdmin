@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import router from '@/router'
 import { useUserStore } from '@/stores/user'
 const request = axios.create({
   baseURL: '/ftyyptapi',
@@ -20,11 +19,11 @@ request.interceptors.request.use(
 )
 request.interceptors.response.use(
   (response) => {
-    if (response.status !== 200) {
+    if (response.status === 4001) {
       ElMessage.error(response.data.msg)
       return Promise.reject(response.data)
     } else {
-      router.push('/index')
+      // ElMessage.success('登陆成功')
       return response
     }
   },

@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { loginApi } from '@/api/user'
 import type { loginType, loginData } from '@/types/user'
+
 // import { userLoginCheck } from '@/apis/auth'
 export const useUserStore = defineStore(
   'user',
@@ -13,6 +14,7 @@ export const useUserStore = defineStore(
   } */
     const login = async (data: loginType) => {
       const { data: res } = await loginApi(data)
+      console.log(res)
       token.value = res.data.token
       userData.value = res.data
       localStorage.setItem('userInfo', JSON.stringify(res.data))

@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const loginStore = useUserStore()
 const loginForm = ref({
   username: '神龙教主',
@@ -19,7 +21,8 @@ const loginElement = ref<FormInstance>()
 const handleLogin = () => {
   loginElement.value!.validate(async (valid) => {
     if (!valid) return
-    loginStore.login(loginForm.value)
+    await loginStore.login(loginForm.value)
+    router.push('/')
   })
 }
 </script>

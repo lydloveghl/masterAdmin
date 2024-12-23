@@ -8,7 +8,7 @@ import IndexHeader from './components/IndexHeader.vue'
       <IndexAside />
       <el-container>
         <index-header></index-header>
-        <el-main>Main</el-main>
+        <el-main><router-view></router-view></el-main>
         <el-footer>2023 © QFADMIN 前端扛把子@千锋教育 🔥 👊🏻👊🏻👊🏻</el-footer>
       </el-container>
     </el-container>
@@ -22,7 +22,7 @@ import IndexHeader from './components/IndexHeader.vue'
     height: 100%;
 
     .el-main {
-      background-color: lightblue;
+      background-color: #f0f2f5;
     }
     .el-footer {
       width: '100%';
