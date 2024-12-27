@@ -3,9 +3,11 @@ import { Search, ArrowDown, ArrowUp, Delete, Plus, Edit } from '@element-plus/ic
 import { ref } from 'vue'
 import { userListApi } from '@/api/user'
 import { useRouter } from 'vue-router'
-import type { userRes } from '@/types/user'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import type { userRes, roleListType } from '@/types/user'
+import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { delUserApi } from '@/api/user'
+import { getRoleList as fetchRoleList } from '@/api/role'
+import { assignRoleApi } from '@/api/role'
 const router = useRouter()
 const isShow = ref(false)
 const formData = ref({
@@ -17,6 +19,12 @@ const formData = ref({
   created_at: '',
   updated_at: '',
 })
+const roleList = ref([] as roleListType[])
+const getRoleList = async () => {
+  const res = await fetchRoleList({ pagenum: 1, pagesize: 1000 })
+  roleList.value = res.data.list
+}
+getRoleList()
 const userList = ref([] as userRes[])
 const allPage = ref()
 const getUserList = async () => {
@@ -70,6 +78,32 @@ const editUserInfo = ref({
   avatar: '',
 })
 const editUserVisible = ref(false)
+const dialogForm = ref<FormInstance>()
+const resetDialogForm = () => {
+  dialogForm.value!.resetFields()
+}
+const assignRoleVisible = ref(false)
+const assignRoleForm = ref({
+  username: '',
+  role_name: '',
+  role_id: 0,
+  user_id: 0,
+})
+const assignRole = (row: any) => {
+  assignRoleVisible.value = true
+  assignRoleForm.value.username = row.username
+  assignRoleForm.value.role_name = row.role_name
+  assignRoleForm.value.user_id = row.user_id
+}
+const assignRoleNow = async () => {
+  const res = await assignRoleApi(assignRoleForm.value)
+  if (res.data.state !== 200) {
+    return ElMessage.error(res.data.msg)
+  }
+  ElMessage.success(res.data.msg)
+  assignRoleVisible.value = false
+  getUserList()
+}
 </script>
 <template>
   <div>
@@ -163,7 +197,7 @@ const editUserVisible = ref(false)
               @click="editUserVisible = true"
               plain
             ></el-button>
-            <el-button type="success" size="small">分配角色</el-button>
+            <el-button type="success" size="small" @click="assignRole(row)">分配角色</el-button>
             <el-button type="danger" size="small" :icon="Delete" @click="deleteUser(row)"
               >删除</el-button
             >
@@ -182,7 +216,7 @@ const editUserVisible = ref(false)
       />
     </el-card>
     <el-dialog v-model="editUserVisible" title="用户编辑" width="800" draggable>
-      <el-form :model="editUserInfo">
+      <el-form :model="editUserInfo" ref="dialogForm">
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
           <el-input v-model="editUserInfo.username" autocomplete="off" />
         </el-form-item>
@@ -201,9 +235,35 @@ const editUserVisible = ref(false)
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">立即编辑</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"> 重置 </el-button>
+          <el-button type="primary" @click="resetDialogForm"> 重置 </el-button>
         </div>
       </template>
+    </el-dialog>
+    <el-dialog v-model="assignRoleVisible" title="分配角色" width="800">
+      <el-form>
+        <el-form-item label="当前用户">
+          <el-input v-model="assignRoleForm.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="当前角色">
+          <el-input v-model="assignRoleForm.role_name" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="选择角色">
+          <el-select
+            v-model="assignRoleForm.role_id"
+            placeholder="Select"
+            size="large"
+            style="width: 240px"
+          >
+            <el-option
+              v-for="item in roleList"
+              :key="item.role_id"
+              :label="item.role_name"
+              :value="item.role_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-button type="primary" @click="assignRoleNow">立即更新</el-button>
+      </el-form>
     </el-dialog>
   </div>
 </template>

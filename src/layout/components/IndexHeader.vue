@@ -8,11 +8,14 @@ import {
   Expand,
   SwitchButton,
 } from '@element-plus/icons-vue'
+import TabsView from './TabsView.vue'
 import { useAsideStore } from '@/stores/aside'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const router = useRouter()
+const route = useRoute()
+console.log(router, route)
 const asideStore = useAsideStore()
 const showAsideNav = () => {
   asideStore.isCollapse = !asideStore.isCollapse
@@ -42,8 +45,8 @@ const userStore = useUserStore()
           <el-icon @click="showAsideNav()" v-show="!asideStore.isCollapse"><Expand /></el-icon>
           <el-breadcrumb :separator-icon="ArrowRight">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>后台首页</el-breadcrumb-item>
-            <el-breadcrumb-item>数据分析</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ route.meta.name1 }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ route.meta.name2 }}</el-breadcrumb-item>
           </el-breadcrumb>
         </span>
         <span>
@@ -66,7 +69,9 @@ const userStore = useUserStore()
           </el-dropdown>
         </span>
       </p>
-      <p class="moreTitle"></p>
+      <p class="moreTitle">
+        <tabs-view></tabs-view>
+      </p>
     </el-header>
   </div>
 </template>
@@ -106,6 +111,7 @@ const userStore = useUserStore()
   }
   .moreTitle {
     flex: 1;
+    height: 40px;
   }
 }
 </style>

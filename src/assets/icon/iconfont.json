@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1516993",
+      "name": "邀请朋友",
+      "font_class": "yaoqingpengyou",
+      "unicode": "e95b",
+      "unicode_decimal": 59739
+    },
+    {
+      "icon_id": "4485645",
+      "name": "个人",
+      "font_class": "geren",
+      "unicode": "e52a",
+      "unicode_decimal": 58666
+    },
+    {
+      "icon_id": "4766773",
+      "name": "money collect",
+      "font_class": "moneycollect",
+      "unicode": "e7cd",
+      "unicode_decimal": 59341
+    },
+    {
+      "icon_id": "4936952",
+      "name": "IE",
+      "font_class": "IE",
+      "unicode": "e87a",
+      "unicode_decimal": 59514
+    }
+  ]
+}

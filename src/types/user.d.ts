@@ -70,3 +70,9 @@ export interface roleCreateRes {
   msg: string
   state: number
 }
+export interface assignFormType {
+  username: string
+  user_id: number
+  role_name: string
+  role_id: number
+}

@@ -1,8 +1,22 @@
 import request from '@/utils/request'
-import type { getAuthListRes } from '@/types/auth'
+import type { addAuthResType, getAuthListRes } from '@/types/auth'
 export const getAuthListApi = () => {
   return request<getAuthListRes>({
     method: 'get',
     url: '/auth/index',
+  })
+}
+export const addAuthApi = (data: any) => {
+  return request<addAuthResType>({
+    method: 'post',
+    url: '/auth/create',
+    data,
+  })
+}
+export const delAuthApi = (params: any) => {
+  return request({
+    method: 'delete',
+    url: '/auth/delete',
+    params,
   })
 }

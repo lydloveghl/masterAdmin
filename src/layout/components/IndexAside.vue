@@ -1,7 +1,17 @@
 <script lang="ts" setup>
 import menuList from '@/mock/menu/index'
 import { useAsideStore } from '@/stores/aside'
+import { useRouter } from 'vue-router'
+import useTagsViewStore from '@/stores/tagsView'
+const router = useRouter()
+const tagsView = useTagsViewStore()
 const asideStore = useAsideStore()
+const addTagsList = (item: any) => {
+  tagsView.addList({
+    title: item.auth_name,
+    path: item.path,
+  })
+}
 </script>
 <template>
   <el-aside :class="{ 'is-collapse': !asideStore.isCollapse }">
@@ -20,6 +30,7 @@ const asideStore = useAsideStore()
       :collapse-transition="false"
       router
       unique-opened
+      :default-active="router.currentRoute.value.path"
     >
       <el-sub-menu v-for="item in menuList" :key="item.auth_id" :index="String(item.auth_id)">
         <template #title>
@@ -30,6 +41,7 @@ const asideStore = useAsideStore()
           v-for="menuItem in item.children"
           :key="menuItem.auth_id"
           :index="menuItem.path"
+          @click="addTagsList(menuItem)"
         >
           <i class="iconfont" :class="menuItem.icon"></i>
           {{ menuItem.auth_name }}

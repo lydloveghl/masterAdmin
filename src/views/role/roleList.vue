@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { Delete, Edit, Plus, Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import { getRoleList, deleteRoleApi, updateRoleApi } from '@/api/role'
+import { getRoleList, deleteRoleApi, updateRoleApi, assignAuthApi } from '@/api/role'
 import type { roleListType } from '@/types/user'
 import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance } from 'element-plus'
+import { getAuthListApi } from '@/api/auth'
+import { ElTree } from 'element-plus'
+import { get } from 'http'
 const router = useRouter()
 const searchInfo = ref({
   roleName: '',
@@ -20,7 +23,10 @@ const get_role_list = async () => {
   roleListInfo.value = res.data.list
 }
 get_role_list()
-const onSearch = () => {}
+const onSearch = () => {
+  roleForm.value.role_name = searchInfo.value.roleName
+  get_role_list()
+}
 const handleSizeChange = (pageSize: number) => {
   roleForm.value.pagesize = pageSize
   get_role_list()
@@ -69,6 +75,50 @@ const updateRoleInfo = async () => {
     }
   })
 }
+const resetUpdateForm = () => {
+  upDateFormRef.value?.resetFields()
+}
+const assignAuthVisible = ref(false)
+const assignAuth = (row: any) => {
+  assignAuthVisible.value = true
+  assignAuthInfo.value.role_name = row.role_name
+  assignAuthInfo.value.role_id = row.role_id
+  assignAuthInfo.value.auth_ids = row.auth_ids
+  assignAuthInfo.value.auth_ids_son = row.auth_ids_son
+}
+const userAuthList = ref()
+const getAuthList = async () => {
+  const res = await getAuthListApi()
+  userAuthList.value = res.data.data
+}
+getAuthList()
+const assignAuthInfo = ref({
+  role_name: '',
+  role_id: '',
+  auth_ids: '',
+  auth_ids_son: '',
+})
+const treeRef = ref()
+const updateAuth = async () => {
+  const res = await treeRef.value!.getCheckedNodes()
+  console.log(res)
+  const auth_ids = [] as number[]
+  const auth_ids_son = [] as number[]
+  res.forEach((item: any) => {
+    if (item.auth_pid !== 0) auth_ids_son.push(item.auth_id)
+    if (item.auth_pid !== 0) {
+      auth_ids.push(item.auth_id)
+      auth_ids.push(item.auth_pid)
+    }
+  })
+  assignAuthInfo.value.auth_ids_son = auth_ids_son.join()
+  assignAuthInfo.value.auth_ids = [...new Set(auth_ids)].join()
+  const assignAuthRes = await assignAuthApi(assignAuthInfo.value)
+  if (assignAuthRes.data.state !== 200) return ElMessage.error(assignAuthRes.data.msg)
+  ElMessage.success(assignAuthRes.data.msg)
+  assignAuthVisible.value = false
+  get_role_list()
+}
 </script>
 <template>
   <div class="roleList">
@@ -106,7 +156,7 @@ const updateRoleInfo = async () => {
         <el-table-column fixed="right" label="操作" min-width="290" align="center">
           <template #default="{ row }">
             <el-button :icon="Edit" type="primary" plain @click="editRole(row)"></el-button>
-            <el-button type="success">分配角色</el-button>
+            <el-button type="success" @click="assignAuth(row)">分配权限</el-button>
             <el-button :icon="Delete" type="danger" @click="deleteRole(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -134,10 +184,40 @@ const updateRoleInfo = async () => {
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="updateRoleInfo">立即编辑</el-button>
-          <el-button type="primary"> 重置 </el-button>
+          <el-button type="primary" @click="resetUpdateForm"> 重置 </el-button>
         </div>
       </template>
     </el-dialog>
+    <el-drawer v-model="assignAuthVisible" direction="rtl" v-if="assignAuthVisible === true">
+      <template #header>
+        <h1>分配权限</h1>
+      </template>
+      <template #default>
+        <el-form>
+          <el-form-item label="角色名称">
+            <el-input v-model="assignAuthInfo.role_name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="菜单权限">
+            <template #default>
+              <el-tree
+                style="max-width: 600px"
+                :data="userAuthList"
+                :props="{ label: 'auth_name', children: 'children' }"
+                node-key="auth_id"
+                :default-checked-keys="assignAuthInfo.auth_ids_son.split(',')"
+                show-checkbox
+                :height="208"
+                ref="treeRef"
+              />
+            </template>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="updateAuth">立即分配</el-button
+            ><el-button @click="assignAuthVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-drawer>
   </div>
 </template>
 <style lang="scss" scoped></style>
