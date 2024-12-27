@@ -13,10 +13,12 @@ import { useAsideStore } from '@/stores/aside'
 import { useUserStore } from '@/stores/user'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import useTagsViewStore from '@/stores/tagsView'
 const router = useRouter()
 const route = useRoute()
 console.log(router, route)
 const asideStore = useAsideStore()
+const tagsStore = useTagsViewStore()
 const showAsideNav = () => {
   asideStore.isCollapse = !asideStore.isCollapse
 }
@@ -30,6 +32,8 @@ const handleLogout = async () => {
     ElMessage.warning('已取消')
     return
   }
+  asideStore.clearAuthMenu()
+  tagsStore.clearTag()
   ElMessage.success('退出成功')
   userStore.logOut()
   router.push('/login')

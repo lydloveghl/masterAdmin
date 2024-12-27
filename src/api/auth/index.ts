@@ -20,3 +20,9 @@ export const delAuthApi = (params: any) => {
     params,
   })
 }
+export const getAuthMenuApi = () => {
+  return request({
+    method: 'get',
+    url: '/auth/menu',
+  })
+}

@@ -29,7 +29,10 @@ const useTagsViewStore = defineStore(
         highLightItem.value = tagsViewList.value[index - 1].path
       }
     }
-    return { tagsViewList, addList, highLightItem, removeList }
+    const clearTag = () => {
+      tagsViewList.value = []
+    }
+    return { tagsViewList, addList, highLightItem, removeList, clearTag }
   },
   {
     persist: true,

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import menuList from '@/mock/menu/index'
 import { useAsideStore } from '@/stores/aside'
 import { useRouter } from 'vue-router'
 import useTagsViewStore from '@/stores/tagsView'
@@ -32,20 +31,25 @@ const addTagsList = (item: any) => {
       unique-opened
       :default-active="router.currentRoute.value.path"
     >
-      <el-sub-menu v-for="item in menuList" :key="item.auth_id" :index="String(item.auth_id)">
+      <el-sub-menu
+        v-for="item in asideStore.authMenu"
+        :key="item.auth_id"
+        :index="String(item.auth_id)"
+      >
         <template #title>
           <i class="iconfont" :class="item.icon"></i>
           <span>{{ item.auth_name }}</span>
         </template>
-        <el-menu-item
-          v-for="menuItem in item.children"
-          :key="menuItem.auth_id"
-          :index="menuItem.path"
-          @click="addTagsList(menuItem)"
-        >
-          <i class="iconfont" :class="menuItem.icon"></i>
-          {{ menuItem.auth_name }}
-        </el-menu-item>
+        <template v-for="menuItem in item.children" :key="menuItem.auth_id">
+          <el-menu-item
+            :index="menuItem.path"
+            @click="addTagsList(menuItem)"
+            v-if="menuItem.type === 1"
+          >
+            <i class="iconfont" :class="menuItem.icon"></i>
+            {{ menuItem.auth_name }}
+          </el-menu-item>
+        </template>
       </el-sub-menu>
     </el-menu>
   </el-aside>
